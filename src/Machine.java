@@ -33,10 +33,10 @@ public class Machine {
 		}
 	}
 
-	private static String bfs(String str) {
-		Queue<NumberProcess> q = new LinkedList();
-		int num = Integer.parseInt(str);
+	private static String bfs(String numStr) {
+		int num = Integer.parseInt(numStr);
 		
+		Queue<NumberProcess> q = new LinkedList();		
 		q.offer(new NumberProcess(num, EMPTY));
 		
 		isVisited[num] = true;
@@ -49,9 +49,9 @@ public class Machine {
 			
 			int div = current.num / 2;
 			char[] tmp = String.valueOf(current.num).toCharArray();
+			
 			Arrays.sort(tmp);
 			
-			StringBuilder next = new StringBuilder();
 			StringBuilder ascSb = new StringBuilder();
 			StringBuilder descSb = new StringBuilder();
 
@@ -66,6 +66,7 @@ public class Machine {
 			int asc = Integer.parseInt(ascSb.toString());
 			int desc = Integer.parseInt(descSb.toString());
 
+			StringBuilder next = new StringBuilder();
 			if (!isVisited[div]) {
 				isVisited[div] = true;
 				next.append(current.str).append(DIVIDE2);
@@ -75,7 +76,6 @@ public class Machine {
 			}
 			
 			next = new StringBuilder();
-
 			if (!isVisited[mul]) {
 				isVisited[mul] = true;
 				next.append(current.str).append(MULTIPLY2);
@@ -84,7 +84,6 @@ public class Machine {
 			}
 			
 			next = new StringBuilder();
-
 			if (!isVisited[asc]) {
 				isVisited[asc] = true;
 				next.append(current.str).append(SORT);
@@ -94,7 +93,6 @@ public class Machine {
 			}
 			
 			next = new StringBuilder();
-
 			if (!isVisited[desc]) {
 				isVisited[desc] = true;
 				next.append(current.str).append(TROS);
