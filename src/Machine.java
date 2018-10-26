@@ -24,68 +24,83 @@ public class Machine {
 	}
 
 	private static class NumberProcess {
-		String num;
-		String tmp;
+		int num;
+		String str;
 
-		public NumberProcess(String num, String tmp) {
+		public NumberProcess(int num, String str) {
 			this.num = num;
-			this.tmp = tmp;
+			this.str = str;
 		}
 	}
 
-	private static String bfs(String num) {
+	private static String bfs(String str) {
 		Queue<NumberProcess> q = new LinkedList();
+		int num = Integer.parseInt(str);
+		
 		q.offer(new NumberProcess(num, EMPTY));
 		
-		isVisited[Integer.parseInt(num)] = true;
+		isVisited[num] = true;
 
 		while (!q.isEmpty()) {
 			NumberProcess current = q.poll();
 			
-			int mul = Integer.parseInt(current.num) * 2;
+			int mul = current.num * 2;
 			mul = mul >= INF ? mul % INF : mul;
 			
-			int div = Integer.parseInt(current.num) / 2;
-			char[] tmp = current.num.toCharArray();
+			int div = current.num / 2;
+			char[] tmp = String.valueOf(current.num).toCharArray();
 			Arrays.sort(tmp);
+			
+			StringBuilder next = new StringBuilder();
+			StringBuilder ascSb = new StringBuilder();
+			StringBuilder descSb = new StringBuilder();
 
-			String ascTmp = EMPTY, descTmp = EMPTY;
 			for (int i = 0; i < tmp.length; i++) {
-				ascTmp += tmp[i];
+				ascSb.append(tmp[i]);
 			}
 			
 			for (int i = tmp.length - 1; i >= 0; i--) {
-				descTmp += tmp[i];
+				descSb.append(tmp[i]);
 			}
 			
-			int asc = Integer.parseInt(ascTmp);
-			int desc = Integer.parseInt(descTmp);
+			int asc = Integer.parseInt(ascSb.toString());
+			int desc = Integer.parseInt(descSb.toString());
 
 			if (!isVisited[div]) {
 				isVisited[div] = true;
+				next.append(current.str).append(DIVIDE2);
 				
-				if (div == 1) return current.tmp + DIVIDE2;
-				q.offer(new NumberProcess(String.valueOf(div), current.tmp + DIVIDE2));
+				if (div == 1) return next.toString();
+				q.offer(new NumberProcess(div, next.toString()));
 			}
+			
+			next = new StringBuilder();
 
 			if (!isVisited[mul]) {
 				isVisited[mul] = true;
+				next.append(current.str).append(MULTIPLY2);
 				
-				q.offer(new NumberProcess(String.valueOf(mul), current.tmp + MULTIPLY2));
+				q.offer(new NumberProcess(mul, next.toString()));
 			}
+			
+			next = new StringBuilder();
 
 			if (!isVisited[asc]) {
 				isVisited[asc] = true;
+				next.append(current.str).append(SORT);
 				
-				if (asc == 1) return current.tmp + SORT;
-				q.offer(new NumberProcess(String.valueOf(asc), current.tmp + SORT));
+				if (asc == 1) return next.toString();
+				q.offer(new NumberProcess(asc, next.toString()));
 			}
+			
+			next = new StringBuilder();
 
 			if (!isVisited[desc]) {
 				isVisited[desc] = true;
+				next.append(current.str).append(TROS);
 				
-				if (desc == 1) return current.tmp + TROS;
-				q.offer(new NumberProcess(String.valueOf(desc), current.tmp + TROS));
+				if (desc == 1) return next.toString();
+				q.offer(new NumberProcess(desc, next.toString()));
 			}
 		}
 		

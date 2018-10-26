@@ -7,7 +7,6 @@ public class Search {
 	private static final String NEW_LINE = "\n";
 	
 	private static POI[] point = null;
-	private static Radian[] info = null;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -22,7 +21,7 @@ public class Search {
 		Arrays.sort(point);
 		
 		int m = Integer.parseInt(br.readLine());
-		info = new Radian[m];
+		Radian[] info = new Radian[m];
 		
 		StringBuilder sb = new StringBuilder();
 		
