@@ -5,13 +5,15 @@ import java.util.StringTokenizer;
 
 public class Search {
 	private static final String NEW_LINE = "\n";
+	private static final int INF = 200_001;
 	
 	private static POI[] point = null;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
-		point = new POI[n];
+		point = new POI[n + 1];
+		point[n] = new POI(INF, INF);
 		
 		for(int i = 0; i < n; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
@@ -20,6 +22,7 @@ public class Search {
 		
 		Arrays.sort(point);
 		
+		int half = n / 2;
 		int m = Integer.parseInt(br.readLine());
 		Radian[] info = new Radian[m];
 		
@@ -29,19 +32,19 @@ public class Search {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			info[i] = new Radian(Double.parseDouble(st.nextToken()), Double.parseDouble(st.nextToken()), Double.parseDouble(st.nextToken()));
 			
-			double minDist = info[i].x - info[i].r;
-			double maxDist = info[i].x + info[i].r;
+			double minDist = info[i].x - info[i].r - 1;
+			double maxDist = info[i].x + info[i].r + 1;
 			
 			int counts = 0;
 			
-			int startIdx = binarySearch(0, n / 2 - 1, 0, minDist);
-			int endIdx = binarySearch(n / 2, n, 0, maxDist, n);
+			int lowerBound = binarySearch(0, half, 0, minDist);
+			int upperBound = binarySearch(half, n, 0, maxDist, n);
 			
-			for(int idx = startIdx; idx < endIdx; idx++) {
-				double pointDist = Math.pow((point[idx].x - info[i].x), 2) + Math.pow((point[idx].y - info[i].y), 2);
-				double rDist = Math.pow(info[i].r, 2);
-				
-				if(pointDist <= rDist) counts++;
+			lowerBound = lowerBound <= 0 ? lowerBound : lowerBound - 1;
+			upperBound = upperBound >= n - 1 ? upperBound : upperBound + 1;
+			
+			for(int idx = lowerBound; idx < upperBound + 1; idx++) {
+				if(Math.pow((point[idx].x - info[i].x), 2) + Math.pow((point[idx].y - info[i].y), 2) <= Math.pow(info[i].r, 2)) counts++;
 			}
 			
 			sb.append(counts).append(NEW_LINE);
